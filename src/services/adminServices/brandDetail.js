@@ -1,6 +1,5 @@
 const knex = require("../../db/migrations/config/knex")
 
-// working here
 const saveBrandDetailsdata = async (serdetails, subscriptionId) => {
     try{
         const insertData = {
@@ -19,33 +18,30 @@ const saveBrandDetailsdata = async (serdetails, subscriptionId) => {
     }
 }
 
-// const getBrandDetailsById = async (productId, subscriptionId) => {
-const getBrandDetailsById = async (subscriptionId) => {
+const getBrandDetailsById = async (servicesID, subscriptionId) => {
     try{
 
         if(subscriptionId)
             return await knex('brand_details').select('*').where({ SubID: subscriptionId})
         
-        // return await knex('brand_details').select('*').where({servicesID: productId})
+        return await knex('brand_details').select('*').where({servicesID: servicesID})
     }
     catch(err){
         throw Promise.reject(err)
     }
 }
 
-const updateBrandDetailsService = async (serdetails, subscriptionId) => {
+const updateBrandDetailsService = async (serdetails, servicesID) => {
     try{
         const insertData = {
-                CompanyId:serdetails.companyId,
+                CompanyId:serdetails.CompanyId,
                 BrandDetails:serdetails.BrandDetails,
                 Name:serdetails.Name,
-                servicesID:serdetails.servicesID,
                 Year:serdetails.Year,
                 Revenue:serdetails.Revenue,
-                SubID:subscriptionId
+                servicesID:servicesID,
         }
-        // return await knex('brand_details').update(insertData).where({ servicesID: productId})
-        return await knex('brand_details').update(insertData).where({ SubID: subscriptionId})
+        return await knex('brand_details').update(insertData).where({ servicesID: servicesID})
     }
     catch(err){
         throw Promise.reject(err)

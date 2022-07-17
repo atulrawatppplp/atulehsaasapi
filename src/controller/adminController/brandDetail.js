@@ -3,9 +3,9 @@ const { saveBrandDetailsdata, getBrandDetailsById, updateBrandDetailsService} = 
 const saveBrandDetail = async (req, res) => {
     try{
         const subscriptionId = req?.user?.subscriptionId
+        const servicesID = req?.body?.servicesID
 
-        // const brandDetails = await getBrandDetailsById(undefined, subscriptionId)
-        const brandDetails = await getBrandDetailsById(subscriptionId)
+        const brandDetails = await getBrandDetailsById(servicesID, undefined)
         if(brandDetails.length){
             return res.status(409).send({messege: `brand details already added`})
         }
@@ -20,14 +20,12 @@ const saveBrandDetail = async (req, res) => {
 const getBrandDetail = async (req, res) => {
     try{
         const subscriptionId = req?.user?.subscriptionId
-        // const productId = req?.query?.productId
+        const servicesID = req?.body?.servicesID
 
-        // if( !(subscriptionId || productId ))
-        if( !(subscriptionId))
-            return res.status(409).send({ messege: `product id or subscription is mandatory`}).end()
+        if( !(subscriptionId || servicesID ))
+            return res.status(409).send({ messege: `service id or subscription is mandatory`}).end()
 
-        // const response = await getBrandDetailsById(productId, subscriptionId)
-        const response = await getBrandDetailsById(subscriptionId)
+        const response = await getBrandDetailsById(servicesID, subscriptionId)
         return res.status(201).send({ data: response }).end()
     }
     catch(err){
@@ -36,15 +34,13 @@ const getBrandDetail = async (req, res) => {
 }
 const updateBrandDetail = async (req, res) => {
     try{
-        // const productId = req?.body?.productId
-        const subscriptionId = req?.user?.subscriptionId  // that line i create
-        // if(!productId)
-        if(subscriptionId)
-            return res.status(409).send({ messege: `product id property is mandatory in body`})
+        const servicesID = req?.body?.servicesID
 
-        // await updateBrandDetailsService(req.body, productId)
-        await updateBrandDetailsService(req.body, subscriptionId)
-        return res.status(201).send({messege: `product details updated succesfully`}).end()
+        if(!servicesID)
+            return res.status(409).send({ messege: `service id property is mandatory in body`})
+
+        await updateBrandDetailsService(req.body, servicesID)
+        return res.status(201).send({messege: `brand details updated succesfully`}).end()
     }
     catch(err){
         return res.status(500).send('Internal Server Error').end()
